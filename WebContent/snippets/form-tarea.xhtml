@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+			<p:panelGrid id="Grid" columns="2" cellpadding="5">
+  #{msgs.tareaTitulo} 
+  <h:panelGroup>
+					<p:inputText value="#{task.tittle}" required="true"
+						requiredMessage="#{msgs.formAlta_titulo_requiredMessage}"
+						validatorMessage="#{msgs.formAlta_titulo_validatorMessage}"
+						id="titulo">
+						<f:validateLength maximum="20" />
+					</p:inputText>
+				</h:panelGroup>
+  
+  #{msgs.tareaCategoria} 
+  <h:panelGroup>
+					<p:selectOneMenu id="category" value="#{task.category}">
+						<f:selectItem itemLabel="#{msgs.selectCategory}" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{task.categorias}" var="cat"
+							itemLabel="#{cat.name}" itemValue="#{cat.id}" />
+
+					</p:selectOneMenu>
+				</h:panelGroup>
+  
+  #{msgs.tareaComentario}
+  <h:panelGroup>
+					<p:inputTextarea rows="3" cols="33" counter="counter-display"
+						maxlength="80" counterTemplate="#{msgs.counter}"
+						value="#{task.comments}"
+						validatorMessage="#{msgs.formAlta_comment_validatorMessage}"
+						id="comentario">
+						<f:validateLength maximum="80" />
+					</p:inputTextarea>
+					<br />
+					<h:outputText id="counter-display" />
+				</h:panelGroup>  
+  
+    #{msgs.tareaPlaneada}
+  <h:panelGroup>
+					<p:calendar value="#{task.planned}" id="planned" />
+				</h:panelGroup>
+			
+  #{msgs.tareaFinalizada}
+  <h:panelGroup>
+					<p:calendar id="finished" value="#{task.finished}" />
+				</h:panelGroup>
+
+
+				<h:commandButton id="send" value="#{msgs.botonSalvar}" action="#{task.add}"
+					update="Grid" process="@form">
+				</h:commandButton>
+			</p:panelGrid>
+
+	</ui:composition>

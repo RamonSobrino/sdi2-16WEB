@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+	version="2.2">
+
+	<application>
+		<resource-bundle>
+			<base-name>messages</base-name>
+			<var>msgs</var>
+		</resource-bundle>
+	</application>
+
+	<!-- Managed beans -->
+	<managed-bean>
+		<managed-bean-name>user</managed-bean-name>
+		<managed-bean-class>uo.sdi.presentation.BeanUser</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>controller</managed-bean-name>
+		<managed-bean-class>uo.sdi.presentation.BeanUsers</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>settings</managed-bean-name>
+		<managed-bean-class>uo.sdi.presentation.BeanSettings</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>login</managed-bean-name>
+		<managed-bean-class>uo.sdi.presentation.BeanLogin</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>task</managed-bean-name>
+		<managed-bean-class>uo.sdi.presentation.BeanTask</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<navigation-rule>
+		<from-view-id>/index.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{login.verify}</from-action>
+			<from-outcome>exitoAdministrador</from-outcome>
+			<to-view-id>/admin/opciones.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.verify}</from-action>
+			<from-outcome>exitoUser</from-outcome>
+			<to-view-id>/user/opciones.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fallo</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/register.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{login.register}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.register}</from-action>
+			<from-outcome>fallo</from-outcome>
+			<to-view-id>/register.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/admin/opciones.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{controller.listado()}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/admin/listado.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{controller.reiniciar()}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/admin/opciones.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fallo</from-outcome>
+			<to-view-id>/admin/opciones.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/user/opciones.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{controller.listadoTareas}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/user/listado.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{controller.addTarea}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/user/altaTarea.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fallo</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/user/listado.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{task.establecer(vtask)}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/user/editTarea.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{controller.addTarea}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/user/altaTarea.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{controller.listadoTareas}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/user/listado.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fallo</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/user/altaTarea.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{task.add}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/user/listado.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fallo</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{controller.listadoTareas}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/user/listado.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/user/editTarea.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{task.add}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/user/listado.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>fallo</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{controller.listadoTareas}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/user/listado.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>error</from-outcome>
+			<to-view-id>error</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.logout}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>index.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!-- Reglas de navegacion -->
+	<!-- <navigation-rule> <from-view-id>*</from-view-id> <navigation-case> 
+		<from-outcome>error</from-outcome> <to-view-id>/error.xhtml</to-view-id> 
+		</navigation-case> </navigation-rule> <navigation-rule> <from-view-id>*</from-view-id> 
+		<navigation-case> <from-action>#{controller.listado}</from-action> <from-outcome>exito</from-outcome> 
+		<to-view-id>/listado.xhtml</to-view-id> </navigation-case> <navigation-case> 
+		<from-outcome>alta</from-outcome> <to-view-id>/altaForm.xhtml</to-view-id> 
+		</navigation-case> </navigation-rule> <navigation-rule> <from-view-id>/listado.xhtml</from-view-id> 
+		<navigation-case> <from-action>#{controller.baja(valumno)}</from-action> 
+		<from-outcome>exito</from-outcome> <to-view-id>/listado.xhtml</to-view-id> 
+		</navigation-case> <navigation-case> <from-outcome>editar</from-outcome> 
+		<to-view-id>/editForm.xhtml</to-view-id> </navigation-case> </navigation-rule> 
+		<navigation-rule> <from-view-id>/altaForm.xhtml</from-view-id> <navigation-case> 
+		<from-action>#{controller.salva}</from-action> <from-outcome>exito</from-outcome> 
+		<to-view-id>/listado.xhtml</to-view-id> </navigation-case> </navigation-rule> 
+		<navigation-rule> <from-view-id>/editForm.xhtml</from-view-id> <navigation-case> 
+		<from-action>#{controller.salva}</from-action> <from-outcome>exito</from-outcome> 
+		<to-view-id>/listado.xhtml</to-view-id> </navigation-case> </navigation-rule> -->
+</faces-config>

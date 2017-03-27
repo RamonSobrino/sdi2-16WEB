@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template-admin.xhtml">
+
+	<ui:define name="titulo">
+    #{msgs.tituloOperacionListadoAdmin}
+  </ui:define>
+
+	<ui:define name="cuerpo">
+		<h:form id="listado_form">
+			<p:panel header="#{msgs.tituloOperacionListadoAdmin}">
+				<p:dataTable var="vuser" value="#{controller.users}" border="1"
+					id="user-table">
+					<p:column sortBy="#{vuser.id}" id="order_id">
+						<f:facet name="header">#{msgs.tablaId}</f:facet>#{vuser.id}</p:column>
+					<p:column sortBy="#{vuser.login}" id="order_login">
+						<f:facet name="header">#{msgs.tablaLogin}</f:facet>#{vuser.login}</p:column>
+					<p:column sortBy="#{vuser.email}" id="order_email">
+						<f:facet name="header">#{msgs.tablaEmail}</f:facet>#{vuser.email}</p:column>
+					<p:column sortBy="#{vuser.status}" id="order_status">
+						<f:facet name="header">#{msgs.tablaStatus}</f:facet>#{vuser.status}</p:column>
+					<p:column id="boton_desactivar">
+						<f:facet name="header">#{msgs.tablaDesactivar}</f:facet>
+						<p:commandLink action="#{controller.deactivate(vuser)}"
+							type="submit" value="#{msgs.tablaDesactivar}" immediate="true"
+							update="user-table" rendered="#{vuser.enabled}">
+						</p:commandLink>
+						<p:commandLink action="#{controller.activate(vuser)}"
+							type="submit" value="#{msgs.tablaActivar}" immediate="true"
+							update="user-table" rendered="#{!vuser.enabled}">
+						</p:commandLink>
+					</p:column>
+					<p:column  id="boton_baja">
+						<f:facet name="header">#{msgs.tablaDel}</f:facet>
+						<p:commandLink type="submit" value="#{msgs.tablaDel}"
+							immediate="true" action="#{controller.baja(vuser)}"
+							update="user-table">
+							<p:confirm header="#{msgs.confirm_title}" message="#{msgs.confirm_body}"
+								icon="ui-icon-trash" />
+						</p:commandLink>
+						<!-- Confirm -->
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton id="comfirm-delete" value="#{msgs.yes}" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton id="negate-delete" value="#{msgs.no}" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+	</ui:define>
+	<ui:define name="pie">
+		<ui:include src="/snippets/pie-casa-admin.xhtml" />
+	</ui:define>
+</ui:composition>

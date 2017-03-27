@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template-user.xhtml">
+
+	<ui:define name="titulo">
+
+		<h:outputText rendered="#{controller.inboxFlag}"
+			value=" #{msgs.tituloOperacionListadoUserInbox}" />
+		<h:outputText rendered="#{controller.semanaFlag}"
+			value="#{msgs.tituloOperacionListadoUserSemana}" />
+		<h:outputText rendered="#{controller.diaFlag}"
+			value="#{msgs.tituloOperacionListadoUserDia}" />
+
+	</ui:define>
+
+	<ui:define name="cuerpo">
+		<div class="ui-g">
+
+			<p:commandButton actionListener="#{controller.listadoTareas()}"
+				value="#{msgs.listadoInbox}" update="@all" id="listInbox"></p:commandButton>
+			<p:commandButton actionListener="#{controller.listadoDia()}"
+				value="#{msgs.listadoDia}" update="@all" id="listDia"></p:commandButton>
+			<p:commandButton value="#{msgs.listadoSemana}"
+				actionListener="#{controller.listadoSemana()}" update="@all"
+				id="listSemana">
+			</p:commandButton>
+
+		</div>
+
+		<div class="indicador">
+			<h:form>
+				<p:selectBooleanCheckbox value="#{controller.inboxFinalizados}"
+					id="checkIndicador" disabled="#{!controller.inboxFlag}">
+					<p:ajax update="@all" listener="#{controller.listadoTareas()}" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="#{msgs.checkBoxFinalizados}"
+					disabled="#{!controller.inboxFlag}" />
+			</h:form>
+		</div>
+		<h:form>
+			<p:panel header="#{msgs.tituloOperacionListadoUser}">
+				<p:dataTable var="vtask" value="#{controller.tasks}" border="1"
+					rows="8" paginator="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="{currentPage} #{msgs.of} {totalPages}"
+					rowsPerPageTemplate="8" emptyMessage="#{msgs.emptyTable}">
+					<p:column sortBy="#{vtask.id}" id="task_id">
+						<f:facet name="header">#{msgs.tablaId}</f:facet>#{vtask.id}</p:column>
+					<p:column sortBy="#{vtask.title}" filterBy="#{vtask.title}"
+						filterMatchMode="contains" id="task_title">
+						<f:facet name="header">#{msgs.tablaTitle}</f:facet>
+						<h:outputText rendered="#{!vtask.finish}"
+						value="#{vtask.title}" />
+						<h:outputText style="color:green"
+							rendered="#{vtask.finish}"
+							 value="#{vtask.title}" />
+					</p:column>
+					<p:column sortBy="#{vtask.categoryId}" id="task_category">
+						<f:facet name="header">#{msgs.tablaCategory}</f:facet>
+						<h:outputText style="color:red"
+							rendered="#{vtask.late and controller.colorCategoria}"
+							value="#{vtask.categoryId}" />
+						<h:outputText
+							rendered="#{!(vtask.late and controller.colorCategoria)}"
+							value="#{vtask.categoryId}" />
+					</p:column>
+					<p:column sortBy="#{vtask.created}" id="task_created">
+						<f:facet name="header">#{msgs.tablaCreated}</f:facet>
+						<h:outputText value="#{vtask.created}">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="CET"/>
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{vtask.finished}" id="task_finished">
+						<f:facet name="header">#{msgs.tablaFinished}</f:facet>
+						<h:outputText value="#{vtask.finished}">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="CET"/>
+						</h:outputText>
+					</p:column>
+					<p:column sortBy="#{vtask.planned}" id="task_planned">
+						<f:facet name="header">#{msgs.tablaPlanned}</f:facet>
+						<h:outputText style="color:red"
+							rendered="#{vtask.late and controller.colorFecha}"
+							value="#{vtask.planned}">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="CET"/>
+						</h:outputText>
+						<h:outputText
+							rendered="#{!(vtask.late and controller.colorFecha)}"
+							value="#{vtask.planned}">
+							<f:convertDateTime pattern="dd/MM/yyyy" timeZone="CET"/>
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">#{msgs.tablaEdit}</f:facet>
+						<p:commandLink type="submit" value="#{msgs.tablaEdit}"
+							action="#{task.establecer(vtask)}" immediate="true"
+							id="task_edit">
+						</p:commandLink>
+					</p:column>
+					<p:column>
+						<f:facet name="header">#{msgs.tablaBorrar}</f:facet>
+						<h:commandLink type="submit" value="#{msgs.tablaBorrar}"
+							immediate="true" actionListener="#{controller.delete(vtask)}"
+							update="@all" id="task_delete">
+						</h:commandLink>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+	</ui:define>
+	<ui:define name="pie">
+		<ui:include src="/snippets/pie-casa-user.xhtml" />
+	</ui:define>
+</ui:composition>
