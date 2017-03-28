@@ -12,11 +12,11 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import alb.util.log.Log;
-import uo.sdi.business.Services;
 import uo.sdi.business.TaskService;
 import uo.sdi.dto.Category;
 import uo.sdi.dto.Task;
 import uo.sdi.dto.User;
+import uo.sdi.infrastructure.Factories;
 
 @ManagedBean(name = "task")
 @SessionScoped
@@ -67,7 +67,7 @@ public class BeanTask implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Services.getTaskService();
+			service = Factories.services.getTaskService();
 			// De esta forma le damos informaci��n a toArray para poder hacer el
 			// casting a User[]
 			FacesContext context = javax.faces.context.FacesContext
@@ -94,6 +94,7 @@ public class BeanTask implements Serializable {
 
 			if (category == null) {
 				bean.listadoTareas();
+				//FIXME: Esto da un nullpointer si planned se deja vacio
 			} else if (planned.after(new Date())) {
 				bean.listadoSemana();
 			} else {
@@ -123,7 +124,7 @@ public class BeanTask implements Serializable {
 					.getSession(false);
 			User user = (User) session.getAttribute("LOGGEDIN_USER");
 
-			service = Services.getTaskService();
+			service = Factories.services.getTaskService();
 			this.task = new Task();
 			task.setTitle(tittle);
 			task.setComments(comments);
@@ -163,7 +164,7 @@ public class BeanTask implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Services.getTaskService();
+			service = Factories.services.getTaskService();
 			// De esta forma le damos informaci��n a toArray para poder hacer el
 			// casting a User[]
 			FacesContext context = javax.faces.context.FacesContext

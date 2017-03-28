@@ -11,11 +11,11 @@ import javax.faces.context.FacesContext;
 
 import alb.util.log.Log;
 import uo.sdi.business.LoginService;
-import uo.sdi.business.Services;
 import uo.sdi.business.exception.BusinessException;
 import uo.sdi.dto.User;
 import uo.sdi.dto.types.UserStatus;
-import uo.sdi.infrastructure.BundleFactorie;
+import uo.sdi.infrastructure.Factories;
+import uo.sdi.presentation.helper.BundleFactorie;
 
 @ManagedBean(name = "login")
 @SessionScoped
@@ -37,7 +37,7 @@ public class BeanLogin implements Serializable {
 
 	public String verify() {
 		ResourceBundle bundle = BundleFactorie.getMessagesBundle();
-		LoginService login = Services.getLoginService();
+		LoginService login = Factories.services.getLoginService();
 		User user;
 		try {
 			user = login.doLogin(name, password);
@@ -77,7 +77,7 @@ public class BeanLogin implements Serializable {
 		User u = new User().setLogin(name).setEmail(email).setIsAdmin(false)
 				.setPassword(password).setStatus(UserStatus.ENABLED);
 		try {
-			Services.getUserService().registerUser(u);
+			Factories.services.getUserService().registerUser(u);
 			cont.addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, bundle

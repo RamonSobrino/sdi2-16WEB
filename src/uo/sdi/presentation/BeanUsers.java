@@ -16,13 +16,13 @@ import javax.servlet.http.HttpSession;
 
 import alb.util.log.Log;
 import uo.sdi.business.AdminService;
-import uo.sdi.business.Services;
 import uo.sdi.business.TaskService;
 import uo.sdi.business.UserService;
 import uo.sdi.business.exception.BusinessException;
 import uo.sdi.dto.Task;
 import uo.sdi.dto.User;
-import uo.sdi.infrastructure.BundleFactorie;
+import uo.sdi.infrastructure.Factories;
+import uo.sdi.presentation.helper.BundleFactorie;
 
 @ManagedBean(name = "controller")
 @SessionScoped
@@ -162,7 +162,7 @@ public class BeanUsers implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Services.getAdminService();
+			service = Factories.services.getAdminService();
 			// De esta forma le damos informaci��n a toArray para poder hacer el
 			// casting a User[]
 			// users = (User[]) service.findAllUsers().toArray(new User[0]);
@@ -185,7 +185,7 @@ public class BeanUsers implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Services.getTaskService();
+			service = Factories.services.getTaskService();
 			// De esta forma le damos informaci��n a toArray para poder hacer el
 			// casting a User[]
 			FacesContext context = javax.faces.context.FacesContext
@@ -231,7 +231,7 @@ public class BeanUsers implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Services.getTaskService();
+			service = Factories.services.getTaskService();
 			// De esta forma le damos informaci��n a toArray para poder hacer el
 			// casting a User[]
 			FacesContext context = javax.faces.context.FacesContext
@@ -265,7 +265,7 @@ public class BeanUsers implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Services.getTaskService();
+			service = Factories.services.getTaskService();
 			// De esta forma le damos informaci��n a toArray para poder hacer el
 			// casting a User[]
 			FacesContext context = javax.faces.context.FacesContext
@@ -309,7 +309,7 @@ public class BeanUsers implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Services.getAdminService();
+			service = Factories.services.getAdminService();
 			// Aliminamos el User seleccionado en la tabla
 			service.deepDeleteUser(vuser.getId());
 			// Actualizamos el javabean de Users inyectado en la tabla.
@@ -338,7 +338,7 @@ public class BeanUsers implements Serializable {
 	public String deactivate(User vuser) {
 		AdminService service;
 		ResourceBundle bundle = BundleFactorie.getMessagesBundle();
-		service = Services.getAdminService();
+		service = Factories.services.getAdminService();
 		FacesContext cont = FacesContext.getCurrentInstance();
 		try {
 			service.disableUser(vuser.getId());
@@ -361,7 +361,7 @@ public class BeanUsers implements Serializable {
 	public String activate(User vuser) {
 		AdminService service;
 		ResourceBundle bundle = BundleFactorie.getMessagesBundle();
-		service = Services.getAdminService();
+		service = Factories.services.getAdminService();
 		FacesContext cont = FacesContext.getCurrentInstance();
 		try {
 			service.enableUser(vuser.getId());
@@ -386,7 +386,7 @@ public class BeanUsers implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Services.getUserService();
+			service = Factories.services.getUserService();
 			// Recargamos el User seleccionado en la tabla de la base de datos
 			// por si hubiera cambios.
 			user = (BeanUser) service.findUser(user.getId());
@@ -404,7 +404,7 @@ public class BeanUsers implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Services.getTaskService();
+			service = Factories.services.getTaskService();
 			// Eliminamos la Task seleccionado en la tabla
 			service.deleteTask(vtask.getId());
 
@@ -425,7 +425,7 @@ public class BeanUsers implements Serializable {
 		FacesContext cont = FacesContext.getCurrentInstance();
 		try {
 
-			service = Services.getAdminService();
+			service = Factories.services.getAdminService();
 			service.initDataBase();
 			cont.addMessage(
 					null,
