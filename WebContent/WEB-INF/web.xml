@@ -32,10 +32,11 @@
 	<servlet>
 		<servlet-name>resteasy</servlet-name>
 		<servlet-class>
-			org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+			org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+		</servlet-class>
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>com.sdi.rest.Application</param-value>
+			<param-value>uo.sdi.rest.Application</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
