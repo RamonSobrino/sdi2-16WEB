@@ -31,7 +31,7 @@ public interface UserServicesRest {
 			throws BusinessException;
 
 	@PUT
-	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	void finalizarTarea(Task tarea) throws BusinessException;
 
 	@POST

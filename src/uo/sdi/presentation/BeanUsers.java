@@ -241,7 +241,7 @@ public class BeanUsers implements Serializable {
 			User user = (User) session.getAttribute("LOGGEDIN_USER");
 
 			List<Task> lista = service.findWeekTasksByUserId(user.getId());
-			List<Task> lista2 = new ArrayList<>();
+			List<Task> lista2 = new ArrayList<Task>();
 			for (Task task : lista) {
 				if (task.getCategoryId() != null)
 					lista2.add(task);
@@ -275,7 +275,7 @@ public class BeanUsers implements Serializable {
 			User user = (User) session.getAttribute("LOGGEDIN_USER");
 
 			List<Task> lista = service.findTodayTasksByUserId(user.getId());
-			List<Task> lista2 = new ArrayList<>();
+			List<Task> lista2 = new ArrayList<Task>();
 			for (Task task : lista) {
 				if (task.getCategoryId() != null)
 					lista2.add(task);
