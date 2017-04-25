@@ -1,6 +1,7 @@
 package uo.sdi.rest.filter;
 
 import java.io.IOException;
+
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -14,12 +15,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jboss.resteasy.util.Base64;
+
+import uo.sdi.business.LoginService;
+import uo.sdi.business.exception.BusinessException;
+import uo.sdi.dto.User;
+import uo.sdi.infrastructure.Factories;
+
 /**
  * Servlet Filter implementation class LoginFilter
  */
-//@WebFilter(dispatcherTypes = { DispatcherType.REQUEST }, urlPatterns = { "/rest/*" }, initParams = { @WebInitParam(name = "LoginParam", value = "/index.xhtml") })
+@WebFilter(dispatcherTypes = { DispatcherType.REQUEST }, urlPatterns = { "/rest/*" }, initParams = { @WebInitParam(name = "LoginParam", value = "/index.xhtml") })
 public class RestLoginFilter implements Filter {
 	FilterConfig config = null;
+
+	LoginService login = Factories.services.getLoginService();
 
 	/**
 	 * Default constructor.
@@ -47,9 +57,35 @@ public class RestLoginFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
-		
-		//TODO: FILTRO PARA EL LOGIN
-		
+
+		String aut = req.getHeader("Authorization");
+		if (aut != null) {
+			byte[] bytes = Base64.decode(aut.split(" ")[1].getBytes());
+			String[] userPass = new String(bytes).split(":");
+
+			if(userPass.length<2){
+				res.setStatus(401);
+				return;
+			}
+			User u = null;
+			try {
+				u = login.doLogin(userPass[0], userPass[1]);
+			} catch (BusinessException e) {
+				res.setStatus(401);
+				return;
+			}
+
+			if (u == null) {
+				res.setStatus(401);
+				return;
+			} else {
+				session.setAttribute("user", u);
+			}
+		} else {
+			res.setStatus(401);
+			return;
+		}
+
 		chain.doFilter(request, response);
 	}
 
